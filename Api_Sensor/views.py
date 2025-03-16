@@ -115,6 +115,7 @@ from .models import SensorData, PuntoClave, Experimento
 import csv
 
 def mostrar_tabla(request, tabla):
+    print("Entro a mostrar tabla: \n")
     # Obtener experimento a visualizar: si se pasa 'experimento_id' en GET, se utiliza; si no, se selecciona el último registrado
     experimento_id = request.GET.get('experimento_id')
     if experimento_id:
