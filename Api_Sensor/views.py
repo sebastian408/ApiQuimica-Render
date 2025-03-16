@@ -115,18 +115,30 @@ from .models import SensorData, PuntoClave, Experimento
 import csv
 
 def mostrar_tabla(request, tabla):
-    print("Entro a mostrar tabla: \n")
-    # Obtener experimento a visualizar: si se pasa 'experimento_id' en GET, se utiliza; si no, se selecciona el último registrado
+    # Obtener experimento a visualizar
     experimento_id = request.GET.get('experimento_id')
     if experimento_id:
-        experimento = get_object_or_404(Experimento, num=experimento_id)
+        experimento = Experimento.objects.filter(num=experimento_id).first()
     else:
         experimento = Experimento.objects.order_by('-num').first()
-    
-    # Captura de la cantidad de datos a mostrar (5,10,20, o 'Todos')
+
+    # Si no hay ningún experimento, retornar datos vacíos o un mensaje
+    if not experimento:
+        return render(request, 'mostrar_tabla.html', {
+            'datos': [],
+            'tabla': tabla,
+            'titulo': 'Sin Experimentos',
+            'experimento': None,
+            'cantidad_actual': 'Todos',
+            'anterior': None,
+            'siguiente': None,
+            'last_experiment': None,
+        })
+
+    # Captura de la cantidad de datos a mostrar
     cantidad_actual = request.GET.get('cantidad', 'Todos')
-    
-    # Dependiendo de la tabla, filtrar los datos del experimento
+
+    # Filtrar los datos según la tabla
     if tabla == 'sensor':
         datos = SensorData.objects.filter(experimento=experimento).order_by('-hora')
         titulo = 'Datos del Sensor'
@@ -135,16 +147,16 @@ def mostrar_tabla(request, tabla):
         titulo = 'Puntos Clave'
     else:
         return HttpResponse("Tabla no válida", status=400)
-    
+
     # Aplicar filtro de cantidad si es un número
     if cantidad_actual.isdigit():
         datos = datos[:int(cantidad_actual)]
-    
-    # Obtención de los experimentos para navegación:
+
+    # Navegación
     anterior = Experimento.objects.filter(num__lt=experimento.num).order_by('-num').first()
     siguiente = Experimento.objects.filter(num__gt=experimento.num).order_by('num').first()
     last_experiment = Experimento.objects.order_by('-num').first()
-    
+
     context = {
         'datos': datos,
         'tabla': tabla,
@@ -156,6 +168,7 @@ def mostrar_tabla(request, tabla):
         'last_experiment': last_experiment,
     }
     return render(request, 'mostrar_tabla.html', context)
+
 
 import csv
 from django.http import HttpResponse
