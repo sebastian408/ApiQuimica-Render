@@ -6,17 +6,17 @@ from pathlib import Path
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-# SECRET_KEY = os.environ.get("SECRET_KEY")
-SECRET_KEY = 'i6f0zw)-9$c5s2)jmiwu6ae@khyon!#**$k2%+=b2$pxzvghe4'
+SECRET_KEY = os.environ.get("SECRET_KEY")
+# SECRET_KEY = 'i6f0zw)-9$c5s2)jmiwu6ae@khyon!#**$k2%+=b2$pxzvghe4'
 
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = os.environ.get("DEBUG","False").lower() == "True"
-DEBUG = True
+DEBUG = os.environ.get("DEBUG","False").lower() == "True"
+# DEBUG = True
 
-# ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
+# ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -62,26 +62,26 @@ WSGI_APPLICATION = 'Api_Sensor.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ApiQuimica',
-        'USER': 'postgres',
-        'PASSWORD': 'Sebas123456',
-        'HOST': 'localhost',  # O la dirección IP de tu servidor PostgreSQL
-        'PORT': '5432',       # El puerto predeterminado de PostgreSQL es 5432
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
-# database_url=os.environ.get("DATABASE_URL")
-# DATABASES["default"] = dj_database_url.parse(database_url)
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'ApiQuimica',
+#         'USER': 'postgres',
+#         'PASSWORD': 'Sebas123456',
+#         'HOST': 'localhost',  # O la dirección IP de tu servidor PostgreSQL
+#         'PORT': '5432',       # El puerto predeterminado de PostgreSQL es 5432
+#     }
+# }
+
+database_url=os.environ.get("DATABASE_URL")
+DATABASES["default"] = dj_database_url.parse(database_url)
 
 AUTH_PASSWORD_VALIDATORS = [
     {
