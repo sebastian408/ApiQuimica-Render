@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}{{ titulo }} - Experimento {{ experimento.num }}{% endblock %}
+
+{% block content %}
+<h2>{{ titulo }} - Experimento {{ experimento.num }}</h2>
+
+<!-- Muestra el estado (si lo deseas, por ejemplo, con clases CSS) -->
+<p>Estado del experimento: <strong class="{% if experimento.activa %}activo{% else %}finalizado{% endif %}">
+    {% if experimento.activa %}Activo{% else %}Finalizado{% endif %}
+</strong></p>
+
+<!-- Navegación entre experimentos -->
+<div>
+  {% if anterior %}
+      <a href="?experimento_id={{ anterior.num }}&tabla={{ tabla }}&cantidad={{ cantidad_actual }}" class="btn btn-primary">← Anterior</a>
+  {% endif %}
+  {% if siguiente %}
+      <a href="?experimento_id={{ siguiente.num }}&tabla={{ tabla }}&cantidad={{ cantidad_actual }}" class="btn btn-primary">Siguiente →</a>
+  {% endif %}
+  {% if last_experiment and experimento.num != last_experiment.num %}
+      <a href="?experimento_id={{ last_experiment.num }}&tabla={{ tabla }}&cantidad={{ cantidad_actual }}" class="btn btn-primary">Último</a>
+  {% endif %}
+</div>
+
+
+<hr>
+
+<!-- Filtros: selección de cantidad de datos -->
+<form method="GET" action="">
+    <input type="hidden" name="experimento_id" value="{{ experimento.num }}">
+    <input type="hidden" name="tabla" value="{{ tabla }}">
+    <label for="cantidad">Cantidad de datos a mostrar:</label>
+    <select name="cantidad" id="cantidad">
+        <option value="5" {% if cantidad_actual == "5" %}selected{% endif %}>5</option>
+        <option value="10" {% if cantidad_actual == "10" %}selected{% endif %}>10</option>
+        <option value="20" {% if cantidad_actual == "20" %}selected{% endif %}>20</option>
+        <option value="Todos" {% if cantidad_actual == "Todos" %}selected{% endif %}>Todos</option>
+    </select>
+    <button type="submit" class="btn btn-success">Aplicar</button>
+</form>
+
+<!-- Botón para descargar los datos del experimento actual -->
+<a href="{% url 'descargar_datos' experimento.num tabla %}?cantidad={{ cantidad_actual }}" class="btn btn-info">Descargar Datos</a>
+
+<hr>
+
+<!-- Tabla de datos -->
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Hora</th>
+            <th>Temperatura</th>
+            <th>Presión 1</th>
+            <th>Presión 2</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in datos %}
+        <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.hora }}</td>
+            <td>{{ item.temperatura }}</td>
+            <td>{{ item.presion1 }}</td>
+            <td>{{ item.presion2 }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No hay datos disponibles para este experimento.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

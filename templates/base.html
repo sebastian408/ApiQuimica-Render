@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% block title %}Aplicación de Monitoreo{% endblock %}</title>
+  <style>
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #333;
+    }
+    li {
+      float: left;
+    }
+    li a {
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+    li a:hover {
+      background-color: #111;
+    }
+    .active {
+      background-color: #04AA6D;
+    }
+    .activo {
+      color: green;
+    }
+
+    .finalizado {
+      color: red;
+    }
+
+  </style>
+</head>
+<body>
+  <nav>
+    <ul>
+      {% if request.path != '/' %}
+      <li><a href="{% url 'home' %}">Home</a></li>
+      {% endif %}
+      <li><a href="{% url 'mostrar_tabla' 'sensor' %}">Datos del Sensor</a></li>
+      <li><a href="{% url 'mostrar_tabla' 'punto' %}">Puntos Clave</a></li>
+      <li><a href="{% url 'experiment_list' %}">Experimentos</a></li>
+    </ul>
+  </nav>
+  <hr>
+  {% block content %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,52 @@
+body {
+    background-color: #f8f9fa;
+}
+
+h3{
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+}
+h1,  h5 {
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+}
+
+input {
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+label {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+}
+
+.small-input {
+    width: 4cm;
+}
+
+.small-btn {
+    width: 2cm; /* Ajusta el tamaño para que los botones sean iguales */
+}
+.full-btn{
+    width: 4cm;
+    box-sizing: border-box;
+}
+  
+.mt-2 {
+    margin-top: 0.5rem !important
+}
+
+.status-box {
+    padding: 0.5rem;
+    color: #fff;
+    border-radius: 0.25rem;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    margin-top: 0.5rem;
+}
+.contador {
+    font-weight: bold;
+    font-size: 1.2em; /* Puedes ajustar este valor según tu preferencia */
+}

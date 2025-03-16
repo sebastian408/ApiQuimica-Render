@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Experimentos{% endblock %}
+{% block content %}
+  <h1>Lista de Experimentos</h1>
+  
+  {% if mensaje %}
+    <p style="color:red;">{{ mensaje }}</p>
+  {% endif %}
+  
+  <!-- Tabla con todos los experimentos (ordenados de los más viejos a los más nuevos) -->
+  <table border="1">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Número</th>
+        <th>Descripción</th>
+        <th>Fecha Inicio</th>
+        <th>Hora Inicio</th>
+        <th>Hora Finalización</th>
+        <th>Activa</th>
+        <th>Comentario</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for exp in experiments %}
+        <tr>
+          <td>{{ exp.id }}</td>
+          <td>{{ exp.num }}</td>
+          <td>{{ exp.descripcion }}</td>
+          <td>{{ exp.fecha_inicio }}</td>
+          <td>{{ exp.hora_inicio }}</td>
+          <td>{{ exp.hora_finalizacion }}</td>
+          <td>{{ exp.activa }}</td>
+          <td>{{ exp.comentario }}</td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="8">No hay experimentos registrados.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+  <hr>
+  
+  <!-- Si hay un experimento activo, se muestra el botón para finalizarlo -->
+  {% if active_experiment %}
+    <h3>Finalizar Experimento Activo (Exp: {{ active_experiment.num }})</h3>
+    <form method="post" action="{% url 'experiment_list' %}">
+      {% csrf_token %}
+      <input type="hidden" name="accion" value="finalizar">
+      <button type="submit">Finalizar Experimento Actual</button>
+    </form>
+  {% else %}
+    <p>No hay experimento activo.</p>
+  {% endif %}
+  
+  <hr>
+  
+  <!-- Sección de acciones sobre experimentos finalizados -->
+  <h2>Acciones sobre Experimentos Finalizados</h2>
+  
+  <!-- Formulario para descargar un experimento específico -->
+  <form method="get" action="{% url 'experiment_list' %}">
+    <input type="hidden" name="accion" value="descargar">
+    <label for="num_experimento">Descargar Experimento:</label>
+    <select name="num_experimento" id="num_experimento">
+      {% for exp in inactive_experiments %}
+        <option value="{{ exp.num }}" {% if default_exp and exp.num == default_exp.num %}selected{% endif %}>
+          Experimento {{ exp.num }}
+        </option>
+      {% endfor %}
+    </select>
+    <button type="submit">Descargar Experimento</button>
+  </form>
+  
+  <!-- Formulario para eliminar un experimento -->
+  <form method="post" action="{% url 'experiment_list' %}">
+    {% csrf_token %}
+    <input type="hidden" name="accion" value="eliminar">
+    <label for="num_experimento_eliminar">Eliminar Experimento:</label>
+    <select name="num_experimento" id="num_experimento_eliminar">
+      {% for exp in inactive_experiments %}
+        <option value="{{ exp.num }}" {% if default_exp and exp.num == default_exp.num %}selected{% endif %}>
+          Experimento {{ exp.num }}
+        </option>
+      {% endfor %}
+    </select>
+    <button type="submit">Eliminar Experimento</button>
+  </form>
+  
+  <!-- Botón para descargar TODOS los experimentos -->
+  <form method="get" action="{% url 'experiment_list' %}">
+    <input type="hidden" name="accion" value="descargar_todos">
+    <button type="submit">Descargar TODOS los Experimentos</button>
+  </form>
+  
+  <hr>
+  
+  <!-- Formulario para crear un nuevo experimento, solo si no hay experimento activo -->
+  {% if crear_experimento %}
+    <h2>Crear Nuevo Experimento</h2>
+    <form method="post" action="{% url 'experiment_list' %}">
+      {% csrf_token %}
+      <input type="hidden" name="accion" value="crear">
+      <p>El número del nuevo experimento se asignará automáticamente: <strong>{{ next_num }}</strong></p>
+      <label for="comentario">Comentario (máximo 200 palabras):</label><br>
+      <textarea name="comentario" maxlength="1200" required></textarea><br><br>
+      <button type="submit">Crear Experimento</button>
+    </form>
+  {% endif %}
+{% endblock %}

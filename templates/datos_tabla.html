@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Datos del Sensor</title>
+</head>
+<body>
+    <h1>Datos del Sensor</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Experimento</th>
+                <th>Fecha y Hora</th>
+                <th>Temperatura</th>
+                <th>Presión 1</th>
+                <th>Presión 2</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dato in datos %}
+            <tr>
+                <td>{{ dato.id }}</td>
+                <td>{{ dato.experimento.nombre }}</td>
+                <td>{{ dato.fecha_hora }}</td>
+                <td>{{ dato.temperatura }}</td>
+                <td>{{ dato.presion1 }}</td>
+                <td>{{ dato.presion2 }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">No hay datos disponibles</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

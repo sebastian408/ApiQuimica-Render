@@ -1,0 +1,396 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toma de Datos</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href=" {% static 'css/styles.css' %} ">
+    <meta name="csrf-token" content="{% csrf_token %}">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        h3{
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+        }
+        h1,  h5 {
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+        }
+
+        input {
+            text-align: center;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        label {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+        }
+
+        .small-input {
+            width: 4cm;
+        }
+
+        .small-btn {
+            width: 2cm; /* Ajusta el tamaño para que los botones sean iguales */
+        }
+        .full-btn{
+            width: 4cm;
+            box-sizing: border-box;
+        }
+        
+        .mt-2 {
+            margin-top: 0.5rem !important
+        }
+
+        .status-box {
+            padding: 0.5rem;
+            color: #fff;
+            border-radius: 0.25rem;
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+        .contador {
+            font-weight: bold;
+            font-size: 1.2em; /* Puedes ajustar este valor según tu preferencia */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container my-5">
+        <h1 class="text-center text-danger">TOMA DE DATOS</h1>
+        <div class="form-group row justify-content-center">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-1">
+                <label for="muestra" class="col-form-label text-end">Muestra:</label>
+            </div>
+            <div class="col-sm-3">
+                <h5 class="contador mr-4" id="muestra">{{ Last_Obj.Nro }}</h5>
+            </div>
+            <div class="col-sm-2">
+                <label for="cant-base" class="col-form-label">Cant. Base:</label>
+            </div>
+            <div class="col-sm-2">
+                <input type="text" class="form-control small-input" id="cant-base" placeholder='{{ Cant_Base }}' value='{{ Cant_Base }}'>
+            </div>
+            <div class="col-sm-2"></div> <!-- Columna vacía para centrar -->
+        </div>
+
+
+        <div class="row text-center">
+
+            <div class="col-sm-4 text-center">
+                <label for="nitrogeno" class="form-label">Nitrógeno</label>
+                <div class="d-flex justify-content-center mb-2">
+                    <input type="text" class="form-control small-input mb-2" id="nitrogeno" placeholder={{ Last_Obj.V_teo_1 }} value={{ Last_Obj.V_teo_1 }}>
+                </div>
+                <div class="btn-group justify-content-center" role="group">
+                    <button class="btn btn-primary small-btn " onclick="incrementar('nitrogeno','cant-base')">+</button>
+                    <button class="btn btn-secondary small-btn "
+                        onclick="decrementar('nitrogeno','cant-base')">-</button>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button class="btn btn-warning full-btn mt-2"
+                        onclick="resetear('nitrogeno','cant-base')">Null</button>
+                </div>
+            </div>
+            <div class="col-sm-4 text-center">
+                <label for="nitrogeno" class="form-label">Fosforo</label>
+                <div class="d-flex justify-content-center mb-2">
+                    <input type="text" class="form-control small-input mb-2" id="fosforo" placeholder={{ Last_Obj.V_teo_2 }} value={{ Last_Obj.V_teo_2 }}>
+                </div>
+                <div class="btn-group justify-content-center" role="group">
+                    <button class="btn btn-primary small-btn " onclick="incrementar('fosforo','cant-base')">+</button>
+                    <button class="btn btn-secondary small-btn " onclick="decrementar('fosforo','cant-base')">-</button>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button class="btn btn-warning full-btn mt-2"
+                        onclick="resetear('fosforo','cant-base')">Null</button>
+                </div>
+            </div>
+            <div class="col-sm-4 text-center">
+                <label for="nitrogeno" class="form-label">Potasio</label>
+                <div class="d-flex justify-content-center mb-2">
+                    <input type="text" class="form-control small-input mb-2" id="potasio" placeholder={{ Last_Obj.V_teo_3 }} value={{ Last_Obj.V_teo_3 }}>
+                </div>
+                <div class="btn-group justify-content-center" role="group">
+                    <button class="btn btn-primary small-btn " onclick="incrementar('potasio','cant-base')">+</button>
+                    <button class="btn btn-secondary small-btn " onclick="decrementar('potasio','cant-base')">-</button>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button class="btn btn-warning full-btn mt-2"
+                        onclick="resetear('potasio','cant-base')">Null</button>
+                </div>
+            </div>
+        </div>
+        <h3 class="text-danger mt-5">Configuraciones Extras</h3>
+        <h5 class="text-primary ">Datos Anteriores</h5>
+
+        <div class="row text-center">
+            <div class="col-sm-6 text-center">
+                <h2>Datos Experimentales</h2>
+                <table border="1" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Nro</th>
+                            <th>Nitrogeno</th>
+                            <th>Fosforo</th>
+                            <th>Potasio</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <ul>
+                                    {% for val in Datos_Exp.Nro %}
+                                        <p>{{ val }}</p>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    {% for val in Datos_Exp.V_teo_1 %}
+                                        <p>{{ val }}</p>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    {% for val in Datos_Exp.V_teo_2 %}
+                                        <p>{{ val }}</p>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    {% for val in Datos_Exp.V_teo_3 %}
+                                        <p>{{ val }}</p>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    {% for val in Datos_Exp.Fecha %}
+                                        <p>{{ val }}</p>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-6 text-center">
+                <h2>Datos Teoricos</h2>
+                <table border="1" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Nro</th>
+                            <th>Nitrogeno</th>
+                            <th>Fosforo</th>
+                            <th>Potasio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <ul>
+                                    {% for val in Datos_Teo.Nro %}
+                                        <p>{{ val }}</p>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    {% for val in Datos_Teo.V_teo_1 %}
+                                        <p>{{ val }}</p>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    {% for val in Datos_Teo.V_teo_2 %}
+                                        <p>{{ val }}</p>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    {% for val in Datos_Teo.V_teo_3 %}
+                                        <p>{{ val }}</p>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+
+        <div class="row text-center mt-4">
+            <div class="col">
+                <form id="Form_Cargar" action="{% url 'upload page' %}" method="post">
+                    <input type="hidden" name="Muestra" id="muestraInput_Cargar">
+                    <input type="hidden" name="V_teo_1" id="nitrogenoInput_Cargar">
+                    <input type="hidden" name="V_teo_2" id="fosforoInput_Cargar">
+                    <input type="hidden" name="V_teo_3" id="potasioInput_Cargar">
+                    <input type="hidden" name="Valid" id="ValidInput_Cargar" value="True">
+                    <input type="hidden" name="Cant_Base" id="Cant_BaseInput_Cargar" >
+                    <button type="submit" class="btn btn-danger btn-lg w-100" onclick="SubirDatos('Form_Cargar')">Cargar
+                        Dato</button>
+                </form>
+            </div>
+            <div class="col">
+                <div id="rechazado" class="status-box bg-secondary">Rechazado</div>
+            </div>
+            <div class="col">
+                <div id="cargando" class="status-box bg-secondary">Cargando</div>
+            </div>
+            <div class="col">
+                <div id="completado" class="status-box bg-secondary">Completado</div>
+            </div>
+        </div>
+
+        <div class="row text-center justify-content-center mt-5">
+            <div class="col-6 text-center justify-content-center">
+                <div class="d-flex align-items-center">
+                    <form id="Form_Repetir" action="{% url 'upload page' %}" method="post">
+                        <input type="hidden" name="Muestra" id="muestraInput_Repetir">
+                        <input type="hidden" name="V_teo_1" id="nitrogenoInput_Repetir">
+                        <input type="hidden" name="V_teo_2" id="fosforoInput_Repetir">
+                        <input type="hidden" name="V_teo_3" id="potasioInput_Repetir">
+                        <input type="hidden" name="Valid" id="ValidInput_Repetir" value="False">
+                        <input type="hidden" name="Cant_Base" id="Cant_BaseInput_Repetir" >
+                        <button type="submit" class="btn btn-danger btn-lg w-auto mr-2"
+                            onclick="SubirDatos('Form_Repetir')">Repetir</button>
+                    </form>
+                    <form id="Form_Eliminar" action="{% url 'upload page' %}" method="post">
+                        <input type="hidden" name="Muestra" id="muestraInput_Eliminar">
+                        <input type="hidden" name="Valid" id="ValidInput_Eliminar" value="False">
+                        <input type="hidden" name="Delete" id="DeleteInput_Eliminar" value="True">
+                        <input type="hidden" name="Cant_Base" id="Cant_BaseInput_Eliminar" >
+                        <button type="submit" class="btn btn-danger btn-lg w-auto mr-2"
+                            onclick="eliminarDato()">Eliminar</button>
+                    </form>
+
+                    <div class="form-check d-inline-block mx-5">
+                        <input class="form-check-input" type="checkbox" id="actual" name="checkbox-group" checked>
+                        <label class="form-check-label" for="actual">Actual</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mx-2">
+                        <input class="form-check-input mr-2" type="checkbox" id="diferente" name="checkbox-group">
+                        <label class="form-check-label mr-2" for="diferente"></label>
+                        <input type="text" class="form-control small-input mb-2" id="cuadroTexto" placeholder="Otro"
+                            disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function incrementar(id1, id2) {
+            const input1 = document.getElementById(id1);
+            const input2 = document.getElementById(id2);
+            let value = parseFloat(input1.value);
+            let val = parseFloat(input2.value);
+            if (isNaN(value)) value = 0;
+            if (isNaN(val)) { val = 1; }
+            input1.value = (value + val).toFixed(2); // Redondear a 2 decimales
+        }
+
+        function decrementar(id1, id2) {
+            const input1 = document.getElementById(id1);
+            const input2 = document.getElementById(id2);
+            let value = parseFloat(input1.value);
+            let val = parseFloat(input2.value);
+            if (isNaN(value)) value = 0;
+            if (isNaN(val)) { val = 1; }
+            let newValue = value - val;
+            input1.value = newValue < 0 ? 0 : newValue.toFixed(2); // Evitar valores negativos y redondear a 2 decimales
+        }
+
+        function resetear(id) {
+            const input = document.getElementById(id);
+            input.value = "Null";
+        }
+
+        function SubirDatos(formId) {
+            // Obtener los valores actuales de las variables
+            const muestraElement = document.getElementById("muestra");
+            const cant_baseElement = document.getElementById("cant-base");
+            const nitrogeno = document.getElementById("nitrogeno").value;
+            const fosforo = document.getElementById("fosforo").value;
+            const potasio = document.getElementById("potasio").value;
+
+            const cant_base_default = document.getElementById("cant-base").value;
+
+            // Actualizar los valores de los campos del formulario correspondiente
+            document.getElementById("Cant_BaseInput_" + formId.split('_')[1]).value = cant_base_default;
+            document.getElementById("muestraInput_" + formId.split('_')[1]).value = parseFloat(muestraElement.textContent);
+            document.getElementById("nitrogenoInput_" + formId.split('_')[1]).value = nitrogeno === '' ? 'Null' : nitrogeno;
+            document.getElementById("fosforoInput_" + formId.split('_')[1]).value = fosforo === '' ? 'Null' : fosforo;
+            document.getElementById("potasioInput_" + formId.split('_')[1]).value = potasio === '' ? 'Null' : potasio;
+
+            // Enviar el formulario
+            document.getElementById(formId).submit();
+        }
+
+        function eliminarDato() {
+            const muestraElement = document.getElementById("muestra");
+
+            const muestraValor = parseFloat(muestraElement.textContent) - 1;
+            document.getElementById("muestraInput_Eliminar").value = muestraValor;
+
+            // Asegúrate de que los valores de "Valid" y "Delete" se envíen correctamente
+            const cant_base_default = document.getElementById("cant-base").value;
+
+            // Actualizar los valores de los campos del formulario correspondiente
+            document.getElementById("Cant_BaseInput_Eliminar").value = cant_base_default;
+            document.getElementById('ValidInput_Eliminar').value = 'False';
+            document.getElementById('DeleteInput_Eliminar').value = 'True';
+            document.getElementById('Form_Eliminar').submit();
+            // Si necesitas hacer más lógica, puedes agregarla aquí
+        }
+    </script>
+
+    <script>
+        const actualCheckbox = document.getElementById('actual');
+        const diferenteCheckbox = document.getElementById('diferente');
+        const cuadroTexto = document.getElementById('cuadroTexto');
+
+        actualCheckbox.addEventListener('change', function () {
+            if (!this.checked) {
+                diferenteCheckbox.checked = true;
+                cuadroTexto.removeAttribute('disabled');
+            } else {
+                diferenteCheckbox.checked = false;
+                cuadroTexto.setAttribute('disabled', 'disabled');
+            }
+        });
+
+        diferenteCheckbox.addEventListener('change', function () {
+            if (this.checked) {
+                actualCheckbox.checked = false;
+                cuadroTexto.removeAttribute('disabled');
+            } else {
+                cuadroTexto.setAttribute('disabled', 'disabled');
+            }
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- <script src="scripts.js"></script> -->
+</body>
+
+</html>
