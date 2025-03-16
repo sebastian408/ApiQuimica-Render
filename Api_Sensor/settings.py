@@ -3,12 +3,12 @@ import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECRET_KEY = 'i6f0zw)-9$c5s2)jmiwu6ae@khyon!#**$k2%+=b2$pxzvghe4'
-
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -65,7 +65,8 @@ WSGI_APPLICATION = 'Api_Sensor.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -81,6 +82,7 @@ DATABASES = {
 # }
 
 database_url=os.environ.get("DATABASE_URL")
+# database_url= "postgresql://db_apiquimica_user:J9BRmRxjidxJzy1l8yLZLnCKcfDp2YdF@dpg-cvbkrg56l47c73af52m0-a.oregon-postgres.render.com/db_apiquimica"
 DATABASES["default"] = dj_database_url.parse(database_url)
 
 AUTH_PASSWORD_VALIDATORS = [
